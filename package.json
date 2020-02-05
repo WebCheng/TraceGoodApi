@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/WebCheng/TraceGoodServer#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mongo-express": "^0.54.0",
+    "mongodb": "^3.5.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"
