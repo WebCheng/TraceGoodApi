@@ -5,7 +5,7 @@ const {postUser, updateUser} = require("./users/index");
 
 // Home page route.
 router.get('/', function (req, res) {
-    res.end(req.body.email)
+    res.end("home")
 });
 
 // About page route.
