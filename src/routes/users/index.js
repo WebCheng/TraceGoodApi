@@ -1,8 +1,9 @@
 const User = require('../../models/users');
-const {hashSalt, createToken} = require('../../auth/index');
+const {hashSalt} = require('../../middleware/auth/index');
+const {login} = require('../auth/index');
 
 const postUser = async (req, res) => {
-    const {email, password, firstName, lastName, qq} = req.body;
+    const {email, password, firstName, lastName} = req.body;
     //If data is not found then insert
     const newUser = await User.findOneAndUpdate(
         {email},
@@ -19,7 +20,7 @@ const postUser = async (req, res) => {
     if (newUser.lastErrorObject.updatedExisting === true)
         return res.status(409).json('The account is exist!!');
 
-    res.status(200).json({emai: email, token: createToken(email)});
+    login(req, res);
 };
 
 const updateUser = async (req, res) => {

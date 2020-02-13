@@ -1,4 +1,4 @@
-const config = require('../../config');
+const config = require('../../../config');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -13,33 +13,22 @@ const createToken = (w, expiresIn = '24h') => {
     });
 };
 
-const verifiedToken = (token) => {
-
-    jwt.verify(token, config.secret, async function handle(err, decoded) {
-        if (err) return [true, ""];
-    });
-    return [true, ""]
-};
-
 const authorization = async function (req, res, next) {
     let authStr = req.headers['x-access-token'] || req.headers['authorization'];
     const bearers = authStr.split(' ');
     if (bearers.length < 2)
-        return setRespondMsg(
-            res,
-            400,
-            'Auth token is not supplied as in `bearer [TOKEN]`'
-        ).end();
-    verifiedToken(req, res, bearers[1])
-};
+        return res.status(400).send('uth token is not supplied as in `bearer [TOKEN]');
 
-const isauth = async (req, res, next) => {
-    res.send('logout!!');
+    jwt.verify(bearers[1], config.secret, (err, decoded) => {
+        if (err)
+            return res.status(401).send('Token is not valid');
+        req.decoded = decoded;
+        next();
+    });
 };
 
 module.exports = {
     hashSalt,
     createToken,
-    verifiedToken,
     authorization
 };
